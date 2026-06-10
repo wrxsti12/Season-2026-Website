@@ -1,0 +1,256 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* ONE2FRAME Dark Theme - Photography/Videography */
+:root {
+  /* Dark base colors */
+  --background: oklch(0.12 0.005 250);
+  --foreground: oklch(0.95 0.01 80);
+  
+  /* Card surfaces */
+  --card: oklch(0.15 0.005 250);
+  --card-foreground: oklch(0.95 0.01 80);
+  
+  /* Popover */
+  --popover: oklch(0.13 0.005 250);
+  --popover-foreground: oklch(0.95 0.01 80);
+  
+  /* Primary - Warm Gold */
+  --primary: oklch(0.78 0.12 75);
+  --primary-foreground: oklch(0.12 0.005 250);
+  
+  /* Secondary - Muted warm */
+  --secondary: oklch(0.22 0.01 250);
+  --secondary-foreground: oklch(0.90 0.02 80);
+  
+  /* Muted */
+  --muted: oklch(0.20 0.008 250);
+  --muted-foreground: oklch(0.65 0.02 80);
+  
+  /* Accent - Soft gold */
+  --accent: oklch(0.70 0.10 75);
+  --accent-foreground: oklch(0.12 0.005 250);
+  
+  /* Destructive */
+  --destructive: oklch(0.55 0.22 25);
+  --destructive-foreground: oklch(0.95 0.01 80);
+  
+  /* Borders & inputs */
+  --border: oklch(0.25 0.01 250);
+  --input: oklch(0.18 0.005 250);
+  --ring: oklch(0.78 0.12 75);
+  
+  /* Chart colors */
+  --chart-1: oklch(0.78 0.12 75);
+  --chart-2: oklch(0.65 0.10 200);
+  --chart-3: oklch(0.55 0.08 280);
+  --chart-4: oklch(0.72 0.15 50);
+  --chart-5: oklch(0.60 0.12 320);
+  
+  --radius: 0.5rem;
+  
+  /* Sidebar */
+  --sidebar: oklch(0.10 0.005 250);
+  --sidebar-foreground: oklch(0.95 0.01 80);
+  --sidebar-primary: oklch(0.78 0.12 75);
+  --sidebar-primary-foreground: oklch(0.12 0.005 250);
+  --sidebar-accent: oklch(0.18 0.008 250);
+  --sidebar-accent-foreground: oklch(0.90 0.02 80);
+  --sidebar-border: oklch(0.22 0.01 250);
+  --sidebar-ring: oklch(0.78 0.12 75);
+}
+
+@theme inline {
+  --font-sans: 'Lora', Georgia, serif;
+  --font-serif: 'Cormorant Garamond', 'Times New Roman', serif;
+  --font-mono: 'Geist Mono', monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    @apply text-foreground;
+    /* 背景由 layout.tsx 的 fixed Image 層處理，body 本身透明 */
+    background-color: transparent;
+  }
+}
+
+/* Custom animations for ONE2FRAME
+   Performance rules:
+   - Only opacity + transform (GPU composited, no layout/paint triggers)
+   - NO filter: blur() in keyframes — most expensive property, causes jank
+   - NO scale in fade-up/slide — reduces layer count
+*/
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(36px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1);    }
+}
+
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-48px); }
+  to   { opacity: 1; transform: translateX(0);     }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(48px); }
+  to   { opacity: 1; transform: translateX(0);    }
+}
+
+/* Photo entrance — gentle zoom-settle, cinematic feel */
+@keyframes photo-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1);    }
+}
+
+/* Card entrance — translate + scale, more dramatic than fade-up */
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(56px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+.animate-fade-up      { animation: fade-up      0.6s  cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: opacity, transform; }
+.animate-fade-in      { animation: fade-in      0.5s  cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: opacity;           }
+.animate-scale-in     { animation: scale-in     0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: opacity, transform; }
+.animate-slide-in-left  { animation: slide-in-left  0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: opacity, transform; }
+.animate-slide-in-right { animation: slide-in-right 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: opacity, transform; }
+.animate-photo-in     { animation: photo-in     0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: opacity, transform; }
+.animate-card-in      { animation: card-in      0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: opacity, transform; }
+
+.animation-delay-100 { animation-delay: 80ms;  }
+.animation-delay-200 { animation-delay: 160ms; }
+.animation-delay-300 { animation-delay: 240ms; }
+.animation-delay-400 { animation-delay: 320ms; }
+.animation-delay-500 { animation-delay: 420ms; }
+.animation-delay-600 { animation-delay: 520ms; }
+.animation-delay-700 { animation-delay: 620ms; }
+
+/* Page transition — GPU-only, no filter blur (filter triggers expensive repaints) */
+@keyframes page-enter {
+  0%   { opacity: 0; transform: translateY(18px); }
+  100% { opacity: 1; transform: translateY(0);    }
+}
+
+.page-transition {
+  animation: page-enter 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: opacity, transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-transition {
+    animation: none;
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar for dark theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: oklch(0.15 0.005 250);
+}
+
+::-webkit-scrollbar-thumb {
+  background: oklch(0.30 0.01 250);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.40 0.01 250);
+}
+
+/* Image hover effect */
+.image-hover {
+  transition: transform 0.5s ease, filter 0.5s ease;
+}
+
+.image-hover:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+/* Gold underline effect */
+.gold-underline {
+  position: relative;
+}
+
+.gold-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, oklch(0.78 0.12 75), oklch(0.70 0.10 75));
+  transition: width 0.3s ease;
+}
+
+.gold-underline:hover::after {
+  width: 100%;
+}
+
+/* Text gradient */
+.text-gradient {
+  background: linear-gradient(135deg, oklch(0.85 0.10 75), oklch(0.70 0.12 75));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
