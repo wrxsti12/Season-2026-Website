@@ -44,7 +44,7 @@ export function CTA() {
 
         <h2
           className={cn(
-            'font-serif text-4xl md:text-5xl lg:text-6xl font-light mb-6 max-w-4xl mx-auto opacity-0',
+            'font-serif text-3xl md:text-4xl lg:text-5xl font-light mb-6 max-w-4xl mx-auto opacity-0',
             isVisible && 'animate-fade-up animation-delay-100'
           )}
         >

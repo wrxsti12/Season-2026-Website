@@ -6,7 +6,7 @@ import { PortfolioGallery } from '@/components/portfolio/portfolio-gallery'
 
 export const metadata = {
   title: 'Portfolio | ONE2FRAME Photography',
-  description: 'Explore our photography portfolio featuring weddings, portraits, events, and commercial work. See our best shots and get inspired for your next session.',
+  description: '探索 ONE2FRAME 重機攝影作品集，靜態攝影、動態攝影、短片製作三大方案，記錄你與愛車最純粹的樣子。',
 }
 
 export default function PortfolioPage() {

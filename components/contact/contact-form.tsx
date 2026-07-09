@@ -107,9 +107,13 @@ export function ContactForm() {
     }
 
     try {
+      // 主通知信（寄給攝影師）為關鍵信件，失敗才視為預約失敗
       await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams, EMAILJS_PUBLIC_KEY)
-      await emailjs.send(EMAILJS_THANKS_SERVICE, EMAILJS_THANKS_TEMPLATE, templateParams, EMAILJS_PUBLIC_KEY)
       setIsSubmitted(true)
+
+      // 感謝信（寄給車主）為非關鍵信件，背景寄送、失敗不影響預約成功畫面
+      emailjs.send(EMAILJS_THANKS_SERVICE, EMAILJS_THANKS_TEMPLATE, templateParams, EMAILJS_PUBLIC_KEY)
+        .catch((err) => console.error('感謝信寄送失敗:', err))
     } catch {
       setError('送出失敗，請稍後再試。')
     } finally {

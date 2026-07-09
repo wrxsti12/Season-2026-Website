@@ -1,42 +1,40 @@
 'use client'
 
 import { useEffect, useRef, useState, useCallback } from 'react'
+import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
-import { X, ChevronLeft, ChevronRight, Camera, Video, Grid, LayoutGrid } from 'lucide-react'
+import { X, ChevronLeft, ChevronRight, Camera, Video, Film, Grid, LayoutGrid } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-type Category = 'all' | 'static' | 'dynamic'
+type Category = 'all' | 'static' | 'motion' | 'cinematic'
 
 const categories = [
   { id: 'all' as const, label: 'All Work', icon: Grid },
   { id: 'static' as const, label: '靜態攝影', icon: Camera },
-  { id: 'dynamic' as const, label: '動態攝影', icon: Video },
+  { id: 'motion' as const, label: '動態攝影', icon: Video },
+  { id: 'cinematic' as const, label: '短片製作', icon: Film },
 ]
+
+const categoryLabels: Record<Exclude<Category, 'all'>, string> = {
+  static: '靜態攝影',
+  motion: '動態攝影',
+  cinematic: '短片製作',
+}
 
 const portfolioItems = [
   // 靜態攝影
-  { id: 1, category: 'static', title: 'Static Frame Vol.1', image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=80', aspectRatio: 'tall' },
-  { id: 2, category: 'static', title: 'Static Frame Vol.2', image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&q=80', aspectRatio: 'square' },
-  { id: 3, category: 'static', title: 'Static Frame Vol.3', image: 'https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=800&q=80', aspectRatio: 'wide' },
-  { id: 4, category: 'static', title: 'Static Frame Vol.4', image: 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&q=80', aspectRatio: 'square' },
-  { id: 5, category: 'static', title: 'Static Frame Vol.5', image: 'https://images.unsplash.com/photo-1529636798458-92182e662485?w=800&q=80', aspectRatio: 'tall' },
-  { id: 6, category: 'static', title: 'Static Frame Vol.6', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80', aspectRatio: 'tall' },
-  { id: 7, category: 'static', title: 'Static Frame Vol.7', image: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80', aspectRatio: 'square' },
-  { id: 8, category: 'static', title: 'Static Frame Vol.8', image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80', aspectRatio: 'wide' },
-  { id: 9, category: 'static', title: 'Static Frame Vol.9', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80', aspectRatio: 'square' },
-  { id: 10, category: 'static', title: 'Static Frame Vol.10', image: 'https://images.unsplash.com/photo-1511895426328-dc8714191300?w=800&q=80', aspectRatio: 'wide' },
+  { id: 1, category: 'static', title: '車手特寫寫真', image: '/portfolio/static/01-portrait-closeup.jpg', aspectRatio: 'tall' },
+  { id: 2, category: 'static', title: '人車風格寫真', image: '/portfolio/static/02-styled-portrait.jpg', aspectRatio: 'tall' },
+  { id: 3, category: 'static', title: '車隊天橋合照', image: '/portfolio/static/03-crew-portrait.jpg', aspectRatio: 'tall' },
+  { id: 4, category: 'static', title: '對峙', image: '/portfolio/static/04-standoff.jpg', aspectRatio: 'tall' },
 
   // 動態攝影
-  { id: 11, category: 'dynamic', title: 'Motion Rolling Vol.1', image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80', aspectRatio: 'wide' },
-  { id: 12, category: 'dynamic', title: 'Motion Rolling Vol.2', image: 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&q=80', aspectRatio: 'square' },
-  { id: 13, category: 'dynamic', title: 'Motion Rolling Vol.3', image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800&q=80', aspectRatio: 'tall' },
-  { id: 14, category: 'dynamic', title: 'Cinematic Reels Vol.1', image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800&q=80', aspectRatio: 'wide' },
-  { id: 15, category: 'dynamic', title: 'Cinematic Reels Vol.2', image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&q=80', aspectRatio: 'square' },
-  { id: 16, category: 'dynamic', title: 'Cinematic Reels Vol.3', image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80', aspectRatio: 'tall' },
-  { id: 17, category: 'dynamic', title: 'Motion Rolling Vol.4', image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80', aspectRatio: 'square' },
-  { id: 18, category: 'dynamic', title: 'Motion Rolling Vol.5', image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80', aspectRatio: 'wide' },
-  { id: 19, category: 'dynamic', title: 'Cinematic Reels Vol.4', image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&q=80', aspectRatio: 'square' },
-  { id: 20, category: 'dynamic', title: 'Cinematic Reels Vol.5', image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80', aspectRatio: 'wide' },
+  { id: 5, category: 'motion', title: '大橋追焦', image: '/portfolio/motion/01-bridge-chase.jpg', aspectRatio: 'tall' },
+  { id: 6, category: 'motion', title: 'WHY SO SERIOUS', image: '/portfolio/motion/02-why-so-serious.jpg', aspectRatio: 'tall' },
+  { id: 7, category: 'motion', title: '過彎瞬間', image: '/portfolio/motion/03-corner-carve.jpg', aspectRatio: 'tall' },
+
+  // 短片製作
+  { id: 8, category: 'cinematic', title: '暗巷獵光', image: '/portfolio/cinematic/01-night-chase.jpg', aspectRatio: 'tall' },
 ]
 
 export function PortfolioGallery() {
@@ -162,24 +160,29 @@ export function PortfolioGallery() {
                 )}
                 style={{ animationDelay: `${(index % 8) * 50}ms` }}
               >
-                <div className={cn('relative overflow-hidden', viewMode === 'grid' && 'aspect-square')}>
-                  <img
+                <div
+                  className={cn(
+                    'relative overflow-hidden',
+                    viewMode === 'grid' && 'aspect-square',
+                    viewMode === 'masonry' && (
+                      item.aspectRatio === 'tall' ? 'h-[400px]' :
+                      item.aspectRatio === 'wide' ? 'h-[250px]' :
+                      'h-[300px]'
+                    )
+                  )}
+                >
+                  <Image
                     src={item.image}
                     alt={item.title}
-                    className={cn(
-                      'w-full object-cover transition-transform duration-700 group-hover:scale-110',
-                      viewMode === 'masonry' && (
-                        item.aspectRatio === 'tall' ? 'h-[400px]' :
-                        item.aspectRatio === 'wide' ? 'h-[250px]' :
-                        'h-[300px]'
-                      ),
-                      viewMode === 'grid' && 'h-full'
-                    )}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    loading="lazy"
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
                     <span className="inline-block px-2 py-1 bg-primary/20 text-primary text-xs uppercase tracking-wider rounded mb-2">
-                      {item.category === 'static' ? '靜態攝影' : '動態攝影'}
+                      {categoryLabels[item.category as Exclude<Category, 'all'>]}
                     </span>
                     <h3 className="font-serif text-lg font-medium text-foreground">
                       {item.title}
@@ -250,7 +253,7 @@ export function PortfolioGallery() {
             />
             <div className="text-center mt-4">
               <span className="inline-block px-3 py-1 bg-primary/20 text-primary text-xs uppercase tracking-wider rounded-full mb-2">
-                {selectedItem.category === 'static' ? '靜態攝影' : '動態攝影'}
+                {categoryLabels[selectedItem.category as Exclude<Category, 'all'>]}
               </span>
               <h3 className="font-serif text-xl font-medium text-foreground">{selectedItem.title}</h3>
               <p className="text-sm text-muted-foreground mt-1">{currentIndex + 1} of {filteredItems.length}</p>

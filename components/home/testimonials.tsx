@@ -1,40 +1,49 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 import { Quote, Star, ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const testimonials = [
   {
     id: 1,
-    name: 'Sarah & Michael Johnson',
-    role: 'Wedding Couple',
-    image: 'https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?w=200&q=80',
-    quote: 'ONE2FRAME captured our wedding day perfectly. Every photo tells a story and brings back beautiful memories. We could not have asked for a better photographer.',
+    name: '202',
+    role: 'Honda CBR650R',
+    image: '/Clients/202.jpg',
+    quote: '藝術 就是 藝術🔥😥',
     rating: 5,
   },
   {
     id: 2,
-    name: 'Emily Chen',
-    role: 'Portrait Client',
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80',
-    quote: 'The portrait session was incredibly comfortable and fun. The final photos exceeded all my expectations. I felt like a model throughout the entire shoot!',
+    name: 'HDY',
+    role: 'Yamaha R1',
+    image: '/Clients/hdy.jpg',
+    quote: '照片真的頂🔥白天再找時間弄貼文😆🤙',
     rating: 5,
   },
   {
     id: 3,
-    name: 'David Martinez',
-    role: 'Corporate Client',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80',
-    quote: 'Professional, creative, and incredibly easy to work with. Our corporate headshots and brand imagery have never looked better. Highly recommend!',
+    name: 'KEN',
+    role: 'Yamaha R6',
+    image: '/Clients/ken.jpg',
+    quote: '我一直很想幫車子拍這種 你拍的好好看！2500太便宜了草',
     rating: 5,
   },
   {
     id: 4,
-    name: 'Jennifer & Robert Lee',
-    role: 'Event Coverage',
-    image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=200&q=80',
-    quote: 'They captured every special moment at our anniversary celebration. The attention to detail and ability to find the perfect angles was remarkable.',
+    name: 'LAWA',
+    role: 'BMW S1000RR',
+    image: '/Clients/lawa.jpg',
+    quote: '太水了啦 拍的太好看了😍❤️',
+    rating: 5,
+  },
+  {
+    id: 5,
+    name: 'SHA',
+    role: 'Yamaha R6',
+    image: '/Clients/sha.jpg',
+    quote: '愛了😍',
     rating: 5,
   },
 ]
@@ -89,7 +98,7 @@ export function Testimonials() {
               isVisible && 'animate-fade-up animation-delay-100'
             )}
           >
-            What Our Clients Say
+            What Our Riders Say
           </h2>
         </div>
 
@@ -130,11 +139,15 @@ export function Testimonials() {
 
                   {/* Author */}
                   <div className="flex items-center justify-center gap-4">
-                    <img
-                      src={testimonial.image}
-                      alt={testimonial.name}
-                      className="w-14 h-14 rounded-full object-cover border-2 border-primary/30"
-                    />
+                    <div className="relative w-14 h-14 shrink-0">
+                      <Image
+                        src={testimonial.image}
+                        alt={testimonial.name}
+                        fill
+                        sizes="56px"
+                        className="rounded-full object-cover border-2 border-primary/30"
+                      />
+                    </div>
                     <div className="text-left">
                       <div className="font-medium text-foreground">{testimonial.name}</div>
                       <div className="text-sm text-muted-foreground">{testimonial.role}</div>

@@ -109,7 +109,7 @@ export function About() {
             {/* CTA */}
             <div className={cn('opacity-0', isVisible && 'animate-fade-up animation-delay-500')}>
               <Link
-                href="/contact"
+                href="#services"
                 className="inline-block px-9 py-3.5 border border-primary/50 text-primary font-sans text-sm tracking-[0.2em] uppercase hover:bg-primary hover:text-primary-foreground transition-all duration-300"
               >
                 填寫預約表單
@@ -117,88 +117,6 @@ export function About() {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* ── Block 2: 宣言全幅 ──────────────────────── */}
-      <div className={cn(
-        'relative py-16 md:py-20 opacity-0',
-        isVisible && 'animate-fade-in animation-delay-400'
-      )}>
-        <div className="absolute inset-0 bg-background/50 backdrop-blur-sm" />
-        <div className="relative container mx-auto px-6 text-center">
-          <p className="font-serif text-3xl md:text-4xl lg:text-5xl font-light text-white/85 leading-relaxed tracking-wide">
-            如果你喜歡偏黑一點的調性
-            <br />
-            那我想，<span className="text-primary">你找對人了</span>
-          </p>
-          <div className="w-10 h-px bg-primary/40 mx-auto mt-7" />
-        </div>
-      </div>
-
-      {/* ── Block 3: 電影分鏡圖片牆 ─────────────────── */}
-      {/*
-        4 portrait photos (all ~3:4 ratio) in a horizontal contact-sheet strip.
-        Desktop: 4 columns — full cinematic spread.
-        Mobile: 2 columns — clean 2×2.
-        All cells: aspect-[3/4] + object-contain + bg-zinc-950 → zero cropping.
-        Staggered photo-in entrance on scroll.
-      */}
-      <div className="grid grid-cols-3 gap-[2px]">
-        {[
-          {
-            src: '/whysoserious.jpg',
-            alt: 'Why So Serious',
-            label: 'WHY SO SERIOUS',
-            sub: null,
-            delay: 'animation-delay-400',
-          },
-          {
-            src: '/7.jpeg',
-            alt: '',
-            label: null,
-            sub: null,
-            delay: 'animation-delay-500',
-          },
-          {
-            src: '/8.jpeg',
-            alt: '',
-            label: 'ONE2FRAME',
-            sub: '2026',
-            delay: 'animation-delay-600',
-          },
-        ].map((photo) => (
-          <div
-            key={photo.src}
-            className={cn(
-              'relative aspect-[3/4] overflow-hidden bg-zinc-950 group opacity-0',
-              isVisible && `animate-photo-in ${photo.delay}`
-            )}
-          >
-            <Image
-              src={photo.src}
-              alt={photo.alt}
-              fill
-              loading="lazy"
-              sizes="(max-width: 768px) 50vw, 25vw"
-              className="object-contain transition-transform duration-700 group-hover:scale-[1.04]"
-            />
-            {photo.label && (
-              <>
-                <div className="absolute bottom-0 left-0 right-0 h-14 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
-                <div className="absolute bottom-3 left-3">
-                  <span className="block text-white/35 text-[8px] tracking-[0.35em] uppercase font-sans leading-tight">
-                    {photo.label}
-                  </span>
-                  {photo.sub && (
-                    <span className="block text-white/20 text-[7px] tracking-[0.25em] uppercase font-sans mt-0.5">
-                      {photo.sub}
-                    </span>
-                  )}
-                </div>
-              </>
-            )}
-          </div>
-        ))}
       </div>
 
     </section>

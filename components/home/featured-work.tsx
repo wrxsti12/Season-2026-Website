@@ -1,45 +1,36 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
+// 每個方案的作品集圖片放在 public/portfolio/<plan>/ 資料夾，plan id 對應 services.tsx 的三大服務
 const featuredWorks = [
   {
     id: 1,
-    title: 'A Love Story in Tuscany',
-    category: 'Wedding',
-    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=80',
-    href: '/portfolio/tuscany-wedding',
+    plan: 'static',
+    title: '人車寫真',
+    category: '靜態攝影',
+    image: '/OGF/40.jpg',
+    href: '/portfolio?category=static',
   },
   {
     id: 2,
-    title: 'Urban Fashion Portrait',
-    category: 'Portrait',
-    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80',
-    href: '/portfolio/urban-fashion',
+    plan: 'motion',
+    title: 'Rolling Shot',
+    category: '動態攝影',
+    image: '/OGF/20.jpg',
+    href: '/portfolio?category=motion',
   },
   {
     id: 3,
-    title: 'Tech Summit 2025',
-    category: 'Event',
-    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80',
-    href: '/portfolio/tech-summit',
-  },
-  {
-    id: 4,
-    title: 'Luxury Brand Campaign',
-    category: 'Commercial',
-    image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80',
-    href: '/portfolio/luxury-brand',
-  },
-  {
-    id: 5,
-    title: 'Intimate Garden Wedding',
-    category: 'Wedding',
-    image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&q=80',
-    href: '/portfolio/garden-wedding',
+    plan: 'cinematic',
+    title: 'Reels Edit',
+    category: '短片製作',
+    image: '/portfolio/cinematic/01-night-chase.jpg',
+    href: '/portfolio?category=cinematic',
   },
 ]
 
@@ -99,38 +90,9 @@ export function FeaturedWork() {
           </Link>
         </div>
 
-        {/* Masonry Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Large Featured Image */}
-          <Link
-            href={featuredWorks[0].href}
-            className={cn(
-              'group relative overflow-hidden rounded-lg md:col-span-2 md:row-span-2 opacity-0',
-              isVisible && 'animate-scale-in animation-delay-200'
-            )}
-          >
-            <div className="relative h-[400px] md:h-full min-h-[500px]">
-              <img
-                src={featuredWorks[0].image}
-                alt={featuredWorks[0].title}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
-              
-              {/* Content */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
-                <span className="inline-block px-3 py-1 bg-primary/20 text-primary text-xs uppercase tracking-wider rounded-full mb-3">
-                  {featuredWorks[0].category}
-                </span>
-                <h3 className="font-serif text-2xl md:text-3xl font-medium text-foreground group-hover:text-primary transition-colors">
-                  {featuredWorks[0].title}
-                </h3>
-              </div>
-            </div>
-          </Link>
-
-          {/* Smaller Images */}
-          {featuredWorks.slice(1).map((work, index) => (
+        {/* 三方案作品集 — 與 Our Services 相同的三欄結構 */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+          {featuredWorks.map((work, index) => (
             <Link
               key={work.id}
               href={work.href}
@@ -138,22 +100,25 @@ export function FeaturedWork() {
                 'group relative overflow-hidden rounded-lg opacity-0',
                 isVisible && 'animate-scale-in'
               )}
-              style={{ animationDelay: `${(index + 3) * 100}ms` }}
+              style={{ animationDelay: `${200 + index * 150}ms` }}
             >
-              <div className="relative h-64">
-                <img
+              <div className="relative aspect-[3/4]">
+                <Image
                   src={work.image}
                   alt={work.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  loading="lazy"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
-                
+
                 {/* Content */}
-                <div className="absolute bottom-0 left-0 right-0 p-5">
-                  <span className="inline-block px-3 py-1 bg-primary/20 text-primary text-xs uppercase tracking-wider rounded-full mb-2">
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <span className="inline-block px-3 py-1 bg-primary/20 text-primary text-xs uppercase tracking-wider rounded-full mb-3">
                     {work.category}
                   </span>
-                  <h3 className="font-serif text-lg font-medium text-foreground group-hover:text-primary transition-colors">
+                  <h3 className="font-serif text-xl md:text-2xl font-medium text-foreground group-hover:text-primary transition-colors">
                     {work.title}
                   </h3>
                 </div>
