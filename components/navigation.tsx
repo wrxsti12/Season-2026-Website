@@ -100,7 +100,7 @@ export function Navigation() {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden p-2 text-foreground hover:text-primary transition-colors"
+          className="md:hidden p-2.5 text-foreground hover:text-primary transition-colors"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
         >

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Instagram, Facebook, Youtube, Mail, Phone, MapPin } from 'lucide-react'
+import { Instagram, Mail, MapPin } from 'lucide-react'
 
 const footerLinks = {
   services: [
@@ -8,23 +8,16 @@ const footerLinks = {
     { label: 'Cinematic Reels 短片', href: '/contact?plan=cinematic' },
     { label: '查看報價方案', href: '/pricing' },
   ],
-  company: [
-    { label: 'About Us', href: '/about' },
-    { label: 'Our Team', href: '/team' },
-    { label: 'Testimonials', href: '/#testimonials' },
-    { label: 'Blog', href: '/blog' },
-  ],
   support: [
     { label: 'Pricing 報價方案', href: '/pricing' },
     { label: 'Book Now 立即預約', href: '/contact' },
     { label: 'Portfolio 作品集', href: '/portfolio' },
+    { label: 'Testimonials', href: '/#testimonials' },
   ],
 }
 
 const socialLinks = [
   { icon: Instagram, href: 'https://instagram.com/one2frame', label: 'Instagram' },
-  { icon: Facebook, href: 'https://facebook.com/one2frame', label: 'Facebook' },
-  { icon: Youtube, href: 'https://youtube.com/one2frame', label: 'YouTube' },
 ]
 
 export function Footer() {
@@ -32,7 +25,7 @@ export function Footer() {
     <footer className="bg-card/75 backdrop-blur-sm border-t border-border/60">
       {/* Main Footer */}
       <div className="container mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand Column */}
           <div className="lg:col-span-2">
             <Link href="/" className="inline-block mb-6">
@@ -41,23 +34,19 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-muted-foreground leading-relaxed mb-6 max-w-sm">
-              Capturing life&apos;s precious moments with artistic vision and professional excellence. 
-              Your story, beautifully told through our lens.
+              一名重機攝影師，記錄你與愛車最純粹的樣子。
+              靜態攝影・動態Rolling・短片製作，三種方案任你選擇。
             </p>
-            
+
             {/* Contact Info */}
             <div className="space-y-3 text-sm text-muted-foreground">
-              <a href="mailto:hello@one2frame.com" className="flex items-center gap-3 hover:text-primary transition-colors">
+              <a href="mailto:nf3xedk12@gmail.com" className="flex items-center gap-3 hover:text-primary transition-colors">
                 <Mail size={16} className="text-primary" />
-                hello@one2frame.com
-              </a>
-              <a href="tel:+1234567890" className="flex items-center gap-3 hover:text-primary transition-colors">
-                <Phone size={16} className="text-primary" />
-                +1 (234) 567-890
+                nf3xedk12@gmail.com
               </a>
               <div className="flex items-center gap-3">
                 <MapPin size={16} className="text-primary" />
-                Los Angeles, California
+                服務桃園以北地區
               </div>
             </div>
           </div>
@@ -67,23 +56,6 @@ export function Footer() {
             <h3 className="font-serif text-lg font-medium mb-6 text-foreground">Services</h3>
             <ul className="space-y-3">
               {footerLinks.services.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Company */}
-          <div>
-            <h3 className="font-serif text-lg font-medium mb-6 text-foreground">Company</h3>
-            <ul className="space-y-3">
-              {footerLinks.company.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
@@ -136,16 +108,6 @@ export function Footer() {
                 <social.icon size={20} />
               </a>
             ))}
-          </div>
-
-          {/* Legal Links */}
-          <div className="flex items-center gap-6 text-sm text-muted-foreground">
-            <Link href="/privacy" className="hover:text-primary transition-colors">
-              Privacy Policy
-            </Link>
-            <Link href="/terms" className="hover:text-primary transition-colors">
-              Terms of Service
-            </Link>
           </div>
         </div>
       </div>

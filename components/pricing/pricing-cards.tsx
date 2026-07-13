@@ -11,7 +11,7 @@ const plans = [
     name: 'Static Frame',
     subtitle: '靜態影像・風格建立方案',
     tiers: [
-      { label: 'Complete 完整', price: '$2,500', note: '著重特寫，完整收藏' },
+      { label: 'Complete 完整', price: 'NT$2,500', note: '著重特寫，完整收藏' },
     ],
     extra: '',
     bookParam: 'static',
@@ -21,7 +21,7 @@ const plans = [
     name: 'Motion Frame',
     subtitle: 'Rolling Shot・動態美學方案',
     tiers: [
-      { label: 'Complete 完整', price: '$3,000', note: '' },
+      { label: 'Complete 完整', price: 'NT$3,000', note: '' },
     ],
     extra: '',
     bookParam: 'motion',
@@ -31,7 +31,7 @@ const plans = [
     name: 'Cinematic Reels',
     subtitle: 'Reels 短片・個人敘事影像',
     tiers: [
-      { label: '1Min 短片', price: '$5,000', note: '含剪輯' },
+      { label: '1Min 短片', price: 'NT$5,000', note: '含剪輯' },
     ],
     extra: '',
     bookParam: 'cinematic',

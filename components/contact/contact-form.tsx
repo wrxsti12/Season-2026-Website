@@ -11,19 +11,28 @@ const EMAILJS_PUBLIC_KEY     = '3DH3YZGxSTMbs0gwQ'          // ← 填入 EmailJ
 const EMAILJS_SERVICE_ID     = 'service_sutp5s9'          // 主通知（寄給攝影師）
 const EMAILJS_TEMPLATE_ID    = 'template_gw85rci'         // ← 填入通知 Template ID
 const EMAILJS_THANKS_SERVICE  = 'service_hymhlfm'         // 感謝信（寄給客戶）
-const EMAILJS_THANKS_TEMPLATE = 'template_k0bjst8' // ← 填入感謝信 Template ID
+const EMAILJS_THANKS_TEMPLATE = 'template_k0bj3t8' // ← 填入感謝信 Template ID
 // ──────────────────────────────────────────────────────────────
 
-const planLabels: Record<string, string> = {
-  static:    'Static Frame',
-  motion:    'Motion Frame · 動態Rolling',
-  cinematic: 'Cinematic Reels',
+const planInfo: Record<string, { name: string; type: string }> = {
+  static:    { name: 'Static Frame',    type: '靜態攝影' },
+  motion:    { name: 'Motion Frame',    type: '動態攝影' },
+  cinematic: { name: 'Cinematic Reels', type: '短片製作' },
 }
 
-const serviceTypeLabels: Record<string, string> = {
-  static:    '靜態Frame',
-  motion:    '動態Rolling',
-  cinematic: 'Cinematic Reels',
+const planLabels: Record<string, string> = Object.fromEntries(
+  Object.entries(planInfo).map(([k, v]) => [k, v.name])
+)
+
+// EmailJS 透過 Gmail API 轉寄時，非 ASCII 字元（中文等）在轉寄過程中會被誤判編碼而變亂碼。
+// 將中文內容轉成 HTML 數字字元實體，繞過轉寄端的編碼問題，信件範本會正確還原成中文字。
+function escapeForEmailBody(str: string): string {
+  return Array.from(str)
+    .map((ch) => {
+      const code = ch.codePointAt(0)!
+      return code > 127 ? `&#${code};` : ch
+    })
+    .join('')
 }
 
 const timeSlots = [
@@ -95,15 +104,26 @@ export function ContactForm() {
     const dateStr = selectedDate.toLocaleDateString('zh-TW', {
       year: 'numeric', month: 'long', day: 'numeric', weekday: 'long',
     })
+    const info = planInfo[plan] || { name: plan, type: plan }
+    const planDisplay = `${info.name} · ${info.type}`
+    const fullTime    = `${dateStr}　${selectedTime}`
 
     const templateParams = {
-      car_model:    formData.carModel,
-      ig_name:      formData.igName,
-      email:        formData.email,
-      plan:         planLabels[plan] || plan,
-      service_type: serviceTypeLabels[plan] || plan,
-      date:         dateStr,
-      time_slot:    selectedTime,
+      // 郵件標頭用途（收件人／回覆地址）— 保持原始 ASCII，不做實體編碼
+      to_email:    formData.email,
+      email:       formData.email,
+      name:        'ONE2FRAME',
+      user_email:  formData.email,
+      user_ig:     formData.igName,
+
+      // 信件內文顯示用途 — 轉成 HTML 數字實體，避免轉寄時中文變亂碼
+      user_name:       escapeForEmailBody(formData.carModel),
+      shoot_type:      escapeForEmailBody(info.type),
+      shoot_plan:      escapeForEmailBody(info.name),
+      plan_display:    escapeForEmailBody(planDisplay),
+      shoot_date:      escapeForEmailBody(dateStr),
+      shoot_clock:     escapeForEmailBody(selectedTime),
+      shoot_full_time: escapeForEmailBody(fullTime),
     }
 
     try {
@@ -128,11 +148,11 @@ export function ContactForm() {
         <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-primary/20 flex items-center justify-center">
           <Check className="w-8 h-8 text-primary" />
         </div>
-        <h3 className="font-serif text-2xl font-light mb-3">預約已送出！</h3>
+        <h3 className="font-serif text-2xl font-light mb-3">預約已確認</h3>
         <p className="text-muted-foreground text-sm mb-2">
-          感謝你的預約，確認信已寄送至 <span className="text-foreground">{formData.email}</span>
+          感謝你選擇 ONE2FRAME，你的專屬拍攝已經排入我們的行程。
         </p>
-        <p className="text-muted-foreground text-sm mb-6">我們將於 24 小時內與你確認拍攝細節。</p>
+        <p className="text-muted-foreground text-sm mb-6">我們將於 24 小時內與你聯繫，確認拍攝細節。</p>
         <div className="text-left p-4 bg-secondary/50 border border-border rounded-lg text-sm space-y-1 text-muted-foreground mb-6">
           <p><span className="text-foreground">方案：</span>{planLabels[plan] || plan}</p>
           <p><span className="text-foreground">日期：</span>{selectedDate?.toLocaleDateString('zh-TW', { year:'numeric', month:'long', day:'numeric', weekday:'long' })}</p>
@@ -237,14 +257,14 @@ export function ContactForm() {
           {plan && (
             <div>
               <div className="px-4 py-3 bg-background border border-border rounded-lg text-sm text-foreground">
-                {serviceTypeLabels[plan] || plan}
+                {planInfo[plan]?.type || plan}
               </div>
             </div>
           )}
 
           {/* 拍攝日期 — 自製日曆（只開放六日，至少 4 天後） */}
           <div>
-            <div className="bg-background border border-border rounded-lg p-4">
+            <div className="bg-background border border-border rounded-lg p-2.5 sm:p-4">
               {/* Calendar Header */}
               <div className="flex items-center justify-between mb-3">
                 <button type="button" onClick={prevMonth} className="p-1.5 hover:bg-secondary rounded-lg transition-colors">
@@ -289,7 +309,7 @@ export function ContactForm() {
                       onClick={() => handleDateSelect(day)}
                       disabled={!selectable}
                       className={cn(
-                        'py-1.5 text-xs rounded-md transition-all text-center',
+                        'h-10 flex items-center justify-center text-sm rounded-md transition-all',
                         isSelected
                           ? 'bg-primary text-primary-foreground font-medium'
                           : selectable
